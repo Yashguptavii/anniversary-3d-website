@@ -17,28 +17,7 @@
             <span></span><span></span><span></span><span></span><span></span><span></span>
           </div>
           <div class="love-ring">
-            <div class="bear bear-left">
-              <div class="ear ear-left"></div>
-              <div class="ear ear-right"></div>
-              <div class="face">
-                <div class="eye eye-left"></div>
-                <div class="eye eye-right"></div>
-                <div class="nose"></div>
-                <div class="cheek cheek-left"></div>
-                <div class="cheek cheek-right"></div>
-              </div>
-            </div>
-            <div class="bear bear-right">
-              <div class="ear ear-left"></div>
-              <div class="ear ear-right"></div>
-              <div class="face">
-                <div class="eye eye-left"></div>
-                <div class="eye eye-right"></div>
-                <div class="nose"></div>
-                <div class="cheek cheek-left"></div>
-                <div class="cheek cheek-right"></div>
-              </div>
-            </div>
+            <img src="81b36c5e718e96ae8a1f3bff4dbfe599.gif" alt="Cute romantic couple animation" class="love-gif" />
           </div>
         </div>
       </div>
@@ -67,10 +46,33 @@
             <button type="button" class="keypad-button" data-value="7">7</button>
             <button type="button" class="keypad-button" data-value="8">8</button>
             <button type="button" class="keypad-button" data-value="9">9</button>
-            <button type="button" class="keypad-button action" data-action="clear">*</button>
+            <button type="button" class="keypad-button action" data-action="clear" aria-label="Clear all" title="Clear all">C</button>
             <button type="button" class="keypad-button" data-value="0">0</button>
-            <button type="button" class="keypad-button action" data-action="backspace">#</button>
+            <button type="button" class="keypad-button action" data-action="backspace" aria-label="Backspace" title="Backspace">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+                <line x1="18" y1="9" x2="12" y2="15"></line>
+                <line x1="12" y1="9" x2="18" y2="15"></line>
+              </svg>
+            </button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wrong Passcode Modal -->
+    <div class="wrong-modal-overlay" id="wrongModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Wrong Passcode">
+      <div class="wrong-modal-card">
+        <div class="wrong-bubble">
+          <h2 class="wrong-title" aria-label="Wrong Passcode!">
+            <span style="--i:0; --arch-y:8px; --arch-rot:-9deg;">W</span><span style="--i:1; --arch-y:5px; --arch-rot:-7deg;">R</span><span style="--i:2; --arch-y:2px; --arch-rot:-5deg;">O</span><span style="--i:3; --arch-y:0px; --arch-rot:-3deg;">N</span><span style="--i:4; --arch-y:-2px; --arch-rot:-1deg;">G</span>
+            <span class="title-space">&nbsp;</span>
+            <span style="--i:5; --arch-y:-3px; --arch-rot:0deg;">P</span><span style="--i:6; --arch-y:-3px; --arch-rot:0deg;">A</span><span style="--i:7; --arch-y:-2px; --arch-rot:1deg;">S</span><span style="--i:8; --arch-y:-1px; --arch-rot:3deg;">S</span><span style="--i:9; --arch-y:0px; --arch-rot:5deg;">C</span><span style="--i:10; --arch-y:2px; --arch-rot:7deg;">O</span><span style="--i:11; --arch-y:5px; --arch-rot:9deg;">D</span><span style="--i:12; --arch-y:8px; --arch-rot:11deg;">E</span><span style="--i:13; --arch-y:11px; --arch-rot:13deg;">!</span>
+          </h2>
+          <div class="wrong-gif-wrap">
+            <img src="9bb8c0835f91bf2bb816a1b265aea532.gif" alt="Wrong passcode animation" class="wrong-gif" />
+          </div>
+          <button type="button" class="try-again-btn" id="tryAgainBtn">TRY AGAIN</button>
         </div>
       </div>
     </div>

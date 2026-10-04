@@ -4,12 +4,15 @@ let input = [];
 
 const slots = [...document.querySelectorAll('.slot')];
 const keypadButtons = [...document.querySelectorAll('.keypad-button')];
+const wrongModal = document.getElementById('wrongModal');
+const tryAgainBtn = document.getElementById('tryAgainBtn');
 
 function renderSlots() {
   slots.forEach((slot, index) => {
     const value = input[index];
     slot.textContent = value || '';
     slot.classList.toggle('filled', Boolean(value));
+    slot.classList.toggle('active', index === input.length && input.length < maxLength);
   });
 }
 
@@ -28,11 +31,29 @@ function shakeScreen() {
   );
 }
 
+function showWrongModal() {
+  if (!wrongModal) return;
+  wrongModal.classList.add('visible');
+  wrongModal.setAttribute('aria-hidden', 'false');
+}
+
+function hideWrongModal() {
+  if (!wrongModal) return;
+  wrongModal.classList.remove('visible');
+  wrongModal.setAttribute('aria-hidden', 'true');
+  input = [];
+  renderSlots();
+}
+
 function unlock() {
   document.body.classList.add('unlocked');
 }
 
 function handleInput(value) {
+  if (wrongModal && wrongModal.classList.contains('visible')) {
+    hideWrongModal();
+  }
+
   if (input.length >= maxLength) {
     return;
   }
@@ -46,21 +67,42 @@ function handleInput(value) {
     if (enteredCode === correctPassword) {
       setTimeout(unlock, 360);
     } else {
-      input = [];
-      renderSlots();
-      shakeScreen();
+      setTimeout(() => {
+        shakeScreen();
+        showWrongModal();
+      }, 180);
     }
   }
 }
 
 function handleBackspace() {
+  if (wrongModal && wrongModal.classList.contains('visible')) {
+    hideWrongModal();
+    return;
+  }
   input.pop();
   renderSlots();
 }
 
 function handleClear() {
+  if (wrongModal && wrongModal.classList.contains('visible')) {
+    hideWrongModal();
+    return;
+  }
   input = [];
   renderSlots();
+}
+
+if (tryAgainBtn) {
+  tryAgainBtn.addEventListener('click', hideWrongModal);
+}
+
+if (wrongModal) {
+  wrongModal.addEventListener('click', (e) => {
+    if (e.target === wrongModal) {
+      hideWrongModal();
+    }
+  });
 }
 
 keypadButtons.forEach((button) => {
@@ -82,6 +124,33 @@ keypadButtons.forEach((button) => {
       handleClear();
     }
   });
+});
+
+slots.forEach((slot, index) => {
+  slot.addEventListener('click', () => {
+    if (input.length > index) {
+      input = input.slice(0, index);
+      renderSlots();
+    }
+  });
+});
+
+window.addEventListener('keydown', (e) => {
+  if (document.body.classList.contains('unlocked')) return;
+  if (wrongModal && wrongModal.classList.contains('visible')) {
+    if (e.key === 'Enter' || e.key === 'Escape' || e.key === ' ') {
+      e.preventDefault();
+      hideWrongModal();
+      return;
+    }
+  }
+  if (/^[0-9]$/.test(e.key)) {
+    handleInput(e.key);
+  } else if (e.key === 'Backspace') {
+    handleBackspace();
+  } else if (e.key === 'Escape' || e.key === 'Delete') {
+    handleClear();
+  }
 });
 
 renderSlots();
