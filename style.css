@@ -394,7 +394,8 @@ body.unlocked .surprise-screen {
 
 @media (max-width: 820px) {
   body {
-    padding: 18px 0;
+    padding: 12px 0;
+    overflow: auto;
   }
 
   .page-shell {
@@ -406,11 +407,32 @@ body.unlocked .surprise-screen {
   .device-frame {
     height: auto;
     min-height: 610px;
+    border-radius: 14px;
+  }
+
+  .browser-bar {
+    padding: 0 10px;
+    gap: 8px;
+  }
+
+  .nav-icons,
+  .browser-actions {
+    gap: 8px;
+    font-size: 1rem;
+  }
+
+  .address-bar {
+    margin: 0 8px;
+    font-size: 0.68rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .screen {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
+    min-height: 720px;
   }
 
   .left-panel {
@@ -418,7 +440,90 @@ body.unlocked .surprise-screen {
     border-bottom: 2px solid rgba(0, 0, 0, 0.05);
   }
 
+  .love-ring {
+    width: min(72vw, 340px);
+  }
+
+  .bear {
+    width: 96px;
+    height: 104px;
+    bottom: 32px;
+  }
+
+  .ear {
+    width: 20px;
+    height: 20px;
+  }
+
+  .keypad-wrap {
+    width: min(90%, 360px);
+  }
+
   .keypad-wrap h1 {
+    font-size: 2.1rem;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .code-display {
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .slot {
+    width: 18px;
+    height: 18px;
+    border-radius: 8px;
+  }
+
+  .keypad {
+    gap: 10px 12px;
+    width: min(100%, 280px);
+  }
+
+  .keypad-button {
+    height: 54px;
+    border-radius: 12px;
+    font-size: 1.5rem;
+  }
+
+  .message-card {
+    padding: 28px 18px 22px;
+    border-radius: 20px;
+  }
+
+  .message-card h2 {
     font-size: 2.2rem;
+  }
+
+  .message-card p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .browser-bar {
+    height: 42px;
+  }
+
+  .screen {
+    min-height: 660px;
+  }
+
+  .love-ring {
+    width: 78vw;
+  }
+
+  .keypad-wrap h1 {
+    font-size: 1.7rem;
+  }
+
+  .keypad {
+    width: min(100%, 240px);
+  }
+
+  .keypad-button {
+    height: 48px;
+    font-size: 1.3rem;
   }
 }
