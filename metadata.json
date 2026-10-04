@@ -1,0 +1,8 @@
+{
+  "name": "For My Love",
+  "description": "3D interactive anniversary website with password protection",
+  "prompt": "3D interactive anniversary website with password protection",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
