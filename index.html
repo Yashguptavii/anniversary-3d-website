@@ -7,6 +7,9 @@
     <meta name="description" content="3D interactive anniversary website with password protection" />
     <meta property="og:title" content="For My Love" />
     <meta property="og:description" content="3D interactive anniversary website with password protection" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -64,7 +67,7 @@
     <div class="wrong-modal-overlay" id="wrongModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Wrong Passcode">
       <div class="wrong-modal-card">
         <div class="wrong-bubble">
-          <h2 class="wrong-title" aria-label="Wrong Passcode!">
+          <h2 class="wrong-title" id="wrongModalTitle" aria-label="Wrong Passcode!">
             <span style="--i:0; --arch-y:8px; --arch-rot:-9deg;">W</span><span style="--i:1; --arch-y:5px; --arch-rot:-7deg;">R</span><span style="--i:2; --arch-y:2px; --arch-rot:-5deg;">O</span><span style="--i:3; --arch-y:0px; --arch-rot:-3deg;">N</span><span style="--i:4; --arch-y:-2px; --arch-rot:-1deg;">G</span>
             <span class="title-space">&nbsp;</span>
             <span style="--i:5; --arch-y:-3px; --arch-rot:0deg;">P</span><span style="--i:6; --arch-y:-3px; --arch-rot:0deg;">A</span><span style="--i:7; --arch-y:-2px; --arch-rot:1deg;">S</span><span style="--i:8; --arch-y:-1px; --arch-rot:3deg;">S</span><span style="--i:9; --arch-y:0px; --arch-rot:5deg;">C</span><span style="--i:10; --arch-y:2px; --arch-rot:7deg;">O</span><span style="--i:11; --arch-y:5px; --arch-rot:9deg;">D</span><span style="--i:12; --arch-y:8px; --arch-rot:11deg;">E</span><span style="--i:13; --arch-y:11px; --arch-rot:13deg;">!</span>
@@ -73,6 +76,38 @@
             <img src="9bb8c0835f91bf2bb816a1b265aea532.gif" alt="Wrong passcode animation" class="wrong-gif" />
           </div>
           <button type="button" class="try-again-btn" id="tryAgainBtn">TRY AGAIN</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question Screen (After Correct Passcode) -->
+    <div class="question-screen" id="questionScreen" aria-live="polite">
+      <div class="floating-hearts question-hearts">
+        <span>✨</span><span>🌸</span><span>💖</span><span>💕</span><span>✨</span>
+        <span>🌸</span><span>💖</span><span>💕</span>
+      </div>
+
+      <div class="question-card">
+        <div class="question-bubble">
+          <h2 class="question-title">
+            <span class="q-line-1">I made something special for u</span>
+            <span class="q-line-2">do u wanna see it?</span>
+          </h2>
+
+          <div class="question-gif-wrap">
+            <img src="e5d5e612e709ece677c814935848bfbe.gif" alt="I made something special for you" class="question-gif" />
+          </div>
+
+          <div class="question-actions" id="questionActions">
+            <button type="button" class="q-btn yes-btn" id="yesBtn">
+              <u>YES</u>
+            </button>
+            <button type="button" class="q-btn no-btn" id="noBtn">
+              <u>NO</u>
+            </button>
+          </div>
+
+          <p class="no-plea" id="noPlea" aria-live="polite"></p>
         </div>
       </div>
     </div>

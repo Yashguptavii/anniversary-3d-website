@@ -311,7 +311,9 @@ body {
   pointer-events: none;
 }
 
-body.unlocked .screen {
+body.unlocked .screen,
+body.step-question .screen,
+body.step-surprise .screen {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.9s ease;
@@ -458,6 +460,217 @@ body.unlocked .screen {
   box-shadow: 0 4px 12px rgba(219, 57, 57, 0.3);
 }
 
+/* Question Screen (After Correct Passcode) */
+.question-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: radial-gradient(circle at center, #ffffff 0%, #fff7f9 45%, #faedf2 100%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+  overflow: hidden;
+}
+
+body.step-question .question-screen,
+body.unlocked:not(.step-surprise) .question-screen {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+body.step-surprise .question-screen {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.question-hearts span {
+  font-size: 1.6rem;
+  opacity: 0.6;
+}
+
+.question-card {
+  position: relative;
+  width: min(94vw, 560px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 2;
+  animation: questionAppear 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes questionAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.question-bubble {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(255, 230, 240, 0.85) 0%, rgba(255, 243, 248, 0.5) 65%, transparent 100%);
+  padding: 12px 16px 20px;
+  border-radius: 36px;
+}
+
+.question-title {
+  margin: 0 0 10px 0;
+  font-family: 'Fredoka', 'Quicksand', -apple-system, sans-serif;
+  color: #8c202d;
+  line-height: 1.25;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+}
+
+.question-title .q-line-1 {
+  display: block;
+  font-size: clamp(1.4rem, 3.2vw, 2.2rem);
+  margin-bottom: 2px;
+}
+
+.question-title .q-line-2 {
+  display: block;
+  font-size: clamp(1.5rem, 3.6vw, 2.35rem);
+}
+
+.question-gif-wrap {
+  width: 100%;
+  max-width: 340px;
+  margin: 6px auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.question-gif {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 8px 18px rgba(140, 32, 45, 0.12));
+  border-radius: 12px;
+}
+
+.question-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 6px;
+}
+
+.q-btn {
+  appearance: none;
+  border: 2.5px solid rgba(255, 255, 255, 0.95);
+  min-width: 126px;
+  height: 52px;
+  border-radius: 9999px;
+  font-family: 'Fredoka', 'Quicksand', sans-serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(180, 50, 60, 0.28), inset 0 2px 2px rgba(255, 255, 255, 0.5);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, filter 0.2s ease;
+  user-select: none;
+  touch-action: manipulation;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.q-btn u {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2.5px;
+}
+
+.yes-btn {
+  background: linear-gradient(180deg, #f26038, #df441c);
+  box-shadow: 0 8px 24px rgba(223, 68, 28, 0.36), inset 0 2px 2px rgba(255, 255, 255, 0.5);
+}
+
+.yes-btn:hover {
+  transform: translateY(-2px) scale(1.08);
+  filter: brightness(1.06);
+  box-shadow: 0 12px 28px rgba(223, 68, 28, 0.46);
+}
+
+.yes-btn:active {
+  transform: translateY(1px) scale(0.96);
+}
+
+.yes-btn.pulse-grow {
+  animation: pulseButton 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes pulseButton {
+  0% {
+    box-shadow: 0 8px 24px rgba(223, 68, 28, 0.36);
+  }
+  100% {
+    box-shadow: 0 12px 32px rgba(223, 68, 28, 0.65), 0 0 18px rgba(242, 96, 56, 0.5);
+  }
+}
+
+.no-btn {
+  background: linear-gradient(180deg, #db3a3a, #b82525);
+  box-shadow: 0 8px 24px rgba(184, 37, 37, 0.36), inset 0 2px 2px rgba(255, 255, 255, 0.5);
+}
+
+.no-btn:hover {
+  transform: translateY(-1px) scale(1.03);
+}
+
+.no-btn:active {
+  transform: translateY(1px) scale(0.96);
+}
+
+.no-plea {
+  margin: 14px 0 0 0;
+  min-height: 28px;
+  font-family: 'Fredoka', 'Quicksand', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #c93448;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.no-plea.pop {
+  opacity: 1;
+  animation: textPopWiggle 0.42s ease-out forwards;
+}
+
+@keyframes textPopWiggle {
+  0% { opacity: 0; transform: scale(0.85) rotate(-3deg); }
+  40% { opacity: 1; transform: scale(1.1) rotate(3deg); }
+  75% { transform: scale(0.98) rotate(-1deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
 .surprise-screen {
   position: fixed;
   inset: 0;
@@ -469,9 +682,10 @@ body.unlocked .screen {
   pointer-events: none;
   background: radial-gradient(circle at top, rgba(255, 201, 220, 0.9), rgba(255, 190, 218, 0.7) 35%, rgba(48, 11, 28, 0.9) 100%);
   transition: opacity 0.8s ease, visibility 0.8s ease;
+  z-index: 90;
 }
 
-body.unlocked .surprise-screen {
+body.step-surprise .surprise-screen {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -692,5 +906,32 @@ body.unlocked .surprise-screen {
   .try-again-btn {
     padding: 10px 30px;
     font-size: 1.05rem;
+  }
+
+  .question-bubble {
+    padding: 8px 10px 14px;
+    border-radius: 24px;
+  }
+
+  .question-title .q-line-1 {
+    font-size: 1.25rem;
+  }
+
+  .question-title .q-line-2 {
+    font-size: 1.35rem;
+  }
+
+  .question-gif {
+    max-width: 250px;
+  }
+
+  .question-actions {
+    gap: 14px;
+  }
+
+  .q-btn {
+    min-width: 105px;
+    height: 46px;
+    font-size: 1.25rem;
   }
 }
