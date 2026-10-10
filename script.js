@@ -11,7 +11,12 @@ const yesBtn = document.getElementById('yesBtn');
 const noBtn = document.getElementById('noBtn');
 const noPlea = document.getElementById('noPlea');
 const clickMeBtn = document.getElementById('clickMeBtn');
-const backToShowcaseBtn = document.getElementById('backToShowcaseBtn');
+const viewMomentsVideoBtn = document.getElementById('viewMomentsVideoBtn');
+const backToLetterBtn = document.getElementById('backToLetterBtn');
+const videoToShowcaseBtn = document.getElementById('videoToShowcaseBtn');
+const backToShowcaseFromLetterBtn = document.getElementById('backToShowcaseFromLetterBtn');
+const momentsVideo = document.getElementById('momentsVideo');
+const momentsVideo2 = document.getElementById('momentsVideo2');
 
 let noCount = 0;
 let modalSource = 'passcode'; // 'passcode' | 'question_no'
@@ -93,21 +98,63 @@ function hideWrongModal() {
 }
 
 function openQuestionScreen() {
-  document.body.classList.remove('step-showcase', 'step-surprise');
+  document.body.classList.remove('step-showcase', 'step-surprise', 'step-video');
   document.body.classList.add('step-question');
   tryAutoPlayMusic();
 }
 
 function openShowcaseScreen() {
-  document.body.classList.remove('step-question', 'step-surprise');
+  document.body.classList.remove('step-question', 'step-surprise', 'step-video');
   document.body.classList.add('step-showcase');
   tryAutoPlayMusic();
 }
 
 function openSurpriseScreen() {
-  document.body.classList.remove('step-question', 'step-showcase');
+  document.body.classList.remove('step-question', 'step-showcase', 'step-video');
   document.body.classList.add('step-surprise');
   tryAutoPlayMusic();
+}
+
+function openMomentsVideoScreen() {
+  document.body.classList.remove('step-question', 'step-showcase', 'step-surprise');
+  document.body.classList.add('step-video');
+
+  // Pause synthesizer music box so video audio is clear
+  if (musicBox && musicBox.isPlaying) {
+    musicBox.stop();
+    updateMusicUI(false);
+  }
+
+  // Reset video 2
+  if (momentsVideo2) {
+    momentsVideo2.pause();
+    momentsVideo2.currentTime = 0;
+  }
+
+  // Play moments video 1 from beginning
+  if (momentsVideo) {
+    momentsVideo.currentTime = 0;
+    const playPromise = momentsVideo.play();
+    if (playPromise !== undefined) {
+      playPromise.catch((err) => {
+        console.log('Video autoplay handled by browser:', err);
+      });
+    }
+  }
+}
+
+function closeMomentsVideoScreen(target = 'surprise') {
+  if (momentsVideo) {
+    momentsVideo.pause();
+  }
+  if (momentsVideo2) {
+    momentsVideo2.pause();
+  }
+  if (target === 'showcase') {
+    openShowcaseScreen();
+  } else {
+    openSurpriseScreen();
+  }
 }
 
 function handleNo() {
@@ -163,8 +210,35 @@ if (clickMeBtn) {
   clickMeBtn.addEventListener('click', openSurpriseScreen);
 }
 
-if (backToShowcaseBtn) {
-  backToShowcaseBtn.addEventListener('click', openShowcaseScreen);
+if (viewMomentsVideoBtn) {
+  viewMomentsVideoBtn.addEventListener('click', openMomentsVideoScreen);
+}
+
+if (backToLetterBtn) {
+  backToLetterBtn.addEventListener('click', () => closeMomentsVideoScreen('surprise'));
+}
+
+if (videoToShowcaseBtn) {
+  videoToShowcaseBtn.addEventListener('click', () => closeMomentsVideoScreen('showcase'));
+}
+
+if (backToShowcaseFromLetterBtn) {
+  backToShowcaseFromLetterBtn.addEventListener('click', openShowcaseScreen);
+}
+
+// Mutual pause between both videos so audio doesn't clash
+if (momentsVideo && momentsVideo2) {
+  momentsVideo.addEventListener('play', () => {
+    if (!momentsVideo2.paused) {
+      momentsVideo2.pause();
+    }
+  });
+
+  momentsVideo2.addEventListener('play', () => {
+    if (!momentsVideo.paused) {
+      momentsVideo.pause();
+    }
+  });
 }
 
 function handleInput(value) {
@@ -254,6 +328,13 @@ slots.forEach((slot, index) => {
 });
 
 window.addEventListener('keydown', (e) => {
+  if (document.body.classList.contains('step-video')) {
+    if (e.key === 'Escape') {
+      closeMomentsVideoScreen('surprise');
+    }
+    return;
+  }
+
   if (document.body.classList.contains('step-surprise')) {
     if (e.key === 'Escape') {
       openShowcaseScreen();
@@ -458,17 +539,18 @@ if (resealEnvelopeBtn) {
   resealEnvelopeBtn.addEventListener('click', resealEnvelope);
 }
 
-// --- 3. Relationship Counter (Days, Hours, Mins, Secs) ---
-// Anniversary base date: 11 October
-const anniversaryStartDate = new Date('2024-10-11T00:00:00');
+// --- 3. Relationship Counter (Live count from 11 October 2024) ---
 const cntDays = document.getElementById('cntDays');
 const cntHours = document.getElementById('cntHours');
 const cntMinutes = document.getElementById('cntMinutes');
 const cntSeconds = document.getElementById('cntSeconds');
 
+// Relationship start date: 11 October 2024 (00:00:00)
+const RELATIONSHIP_START_DATE = new Date(2024, 9, 11, 0, 0, 0);
+
 function updateRelationshipCounter() {
   const now = new Date();
-  const diffMs = Math.max(0, now - anniversaryStartDate);
+  const diffMs = Math.max(0, now - RELATIONSHIP_START_DATE);
   const totalSeconds = Math.floor(diffMs / 1000);
 
   const days = Math.floor(totalSeconds / 86400);

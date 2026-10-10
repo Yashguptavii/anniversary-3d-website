@@ -212,15 +212,15 @@
         <div class="opened-letter-view" id="openedLetterView" aria-hidden="true">
           <div class="message-card">
             <div class="letter-stamp">💌</div>
-            <p class="mini-tag">11 October • My Forever</p>
+            <p class="mini-tag">11 October 2024 • 2 Years of Us 💕</p>
             <h2>Happy Anniversary, Love 💕</h2>
 
             <!-- Relationship Counter: Days, Hours, Mins, Secs -->
             <div class="relationship-counter" id="relationshipCounter">
-              <p class="counter-label">✨ Loving You For ✨</p>
+              <p class="counter-label">✨ Loving You Since 11 October 2024 ✨</p>
               <div class="counter-grid">
                 <div class="counter-item">
-                  <span class="cnt-digit" id="cntDays">365</span>
+                  <span class="cnt-digit" id="cntDays">730</span>
                   <span class="cnt-unit">Days</span>
                 </div>
                 <div class="counter-item">
@@ -291,14 +291,103 @@
             </div>
 
             <div class="letter-footer">
-              <button type="button" class="back-to-showcase-btn" id="backToShowcaseBtn">
-                <span>🌸</span> View Our Moments <span>💕</span>
+              <button type="button" class="back-to-showcase-btn" id="viewMomentsVideoBtn">
+                <span>🎥</span> View Our Moments <span>💕</span>
+              </button>
+              <button type="button" class="back-to-showcase-page-btn" id="backToShowcaseFromLetterBtn">
+                <span>🌸</span> Anniversary Page
               </button>
               <button type="button" class="reseal-envelope-btn" id="resealEnvelopeBtn" title="Fold back into envelope">
                 <span>💌</span> Fold Letter
               </button>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Our Moments Video Page -->
+    <div class="video-screen" id="momentsVideoScreen" aria-live="polite">
+      <div class="floating-hearts video-hearts">
+        <span>✨</span><span>🌸</span><span>💖</span><span>💕</span><span>✨</span>
+        <span>🌸</span><span>💖</span><span>💕</span>
+      </div>
+
+      <div class="video-container">
+        <div class="video-header">
+          <p class="video-badge">✨ October • Our Story ✨</p>
+          <h1 class="video-title">Our Special Moments 💕</h1>
+          <p class="video-sub">A sweet memory of love made just for you</p>
+        </div>
+
+        <div class="video-cards-list">
+          <!-- Video 1 Card -->
+          <div class="video-card">
+            <div class="video-card-header">
+              <span class="v-card-tag">Memory 1 💕</span>
+              <span class="v-card-subtag">Always & Forever</span>
+            </div>
+            <div class="video-frame">
+              <video
+                id="momentsVideo"
+                src="our-moments.mp4"
+                poster="our-moments-poster.jpg"
+                playsinline
+                controls
+                loop
+                preload="metadata"
+              >
+                Your browser does not support HTML5 video.
+              </video>
+            </div>
+
+            <div class="video-caption-bar">
+              <span class="v-caption-icon">💖</span>
+              <p class="v-caption-text">Every second with you is my favorite memory</p>
+            </div>
+          </div>
+
+          <!-- Video Divider -->
+          <div class="video-divider">
+            <span class="divider-line"></span>
+            <span class="divider-heart">💖</span>
+            <span class="divider-line"></span>
+          </div>
+
+          <!-- Video 2 Card -->
+          <div class="video-card">
+            <div class="video-card-header">
+              <span class="v-card-tag">Memory 2 ✨</span>
+              <span class="v-card-subtag">With All My Heart</span>
+            </div>
+            <div class="video-frame">
+              <video
+                id="momentsVideo2"
+                src="our-moments-2.mp4"
+                poster="our-moments-2-poster.jpg"
+                playsinline
+                controls
+                loop
+                preload="metadata"
+              >
+                Your browser does not support HTML5 video.
+              </video>
+            </div>
+
+            <div class="video-caption-bar">
+              <span class="v-caption-icon">💕</span>
+              <p class="v-caption-text">You make every day brighter and happier ✨</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-actions">
+          <button type="button" class="video-nav-btn btn-back-letter" id="backToLetterBtn">
+            <span>💌</span> Back to Letter
+          </button>
+          <button type="button" class="video-nav-btn btn-back-showcase" id="videoToShowcaseBtn">
+            <span>🌸</span> Anniversary Page <span>💕</span>
+          </button>
         </div>
       </div>
     </div>
