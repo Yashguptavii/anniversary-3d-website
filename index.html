@@ -9,10 +9,19 @@
     <meta property="og:description" content="3D interactive anniversary website with password protection" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&family=Patrick+Hand&family=Quicksand:wght@600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <!-- Romantic Background Music Player -->
+    <button type="button" class="music-pill-btn" id="musicToggleBtn" aria-label="Toggle Romantic Music" title="Play / Pause Romantic Music">
+      <span class="music-disc" id="musicDisc">🎵</span>
+      <span class="music-label" id="musicLabel">Music: Off</span>
+      <span class="music-waves" id="musicWaves">
+        <span></span><span></span><span></span>
+      </span>
+    </button>
+
     <div class="screen" id="lockScreen">
       <div class="panel left-panel">
         <div class="love-scene">
@@ -112,24 +121,197 @@
       </div>
     </div>
 
+    <!-- Anniversary Showcase Screen (After YES on Question Screen) -->
+    <div class="showcase-screen" id="showcaseScreen" aria-live="polite">
+      <div class="floating-hearts showcase-hearts">
+        <span>✨</span><span>🌸</span><span>💖</span><span>💕</span><span>✨</span>
+        <span>🌸</span><span>💖</span><span>💕</span>
+      </div>
+
+      <div class="showcase-canvas">
+        <!-- Arched Happy Anniversary Header in Bold Handwriting -->
+        <div class="showcase-header">
+          <svg class="showcase-arch-svg" viewBox="0 0 760 140" aria-label="Happy Anniversary My Love">
+            <defs>
+              <path id="archCurvePath" d="M 40 120 Q 380 18 720 120" fill="none" />
+            </defs>
+            <text class="arch-svg-text">
+              <textPath href="#archCurvePath" startOffset="50%" text-anchor="middle">
+                Happy Anniversary My Love 💕
+              </textPath>
+            </text>
+          </svg>
+        </div>
+
+        <!-- Center Love Stage & Kiss GIF -->
+        <div class="showcase-stage">
+          <div class="showcase-heart-glow"></div>
+          <span class="stage-star star-1">✦</span>
+          <span class="stage-star star-2">✧</span>
+          <span class="stage-star star-3">✦</span>
+
+          <div class="showcase-main-wrap">
+            <img src="a08232c97cbe65e4618e2f54b7cd7e9e.gif" alt="Milk and Mocha sweet kiss" class="showcase-main-img" />
+          </div>
+
+          <!-- Interactive "CLICK ME" Badge -->
+          <button type="button" class="click-me-badge" id="clickMeBtn" aria-label="Open Letter">
+            <span class="badge-icon">💌</span>
+            <span class="badge-text">
+              <span class="b-click">CLICK</span>
+              <span class="b-me">ME</span>
+            </span>
+            <span class="badge-glow-ring"></span>
+          </button>
+        </div>
+
+        <!-- Bottom I LOVE YOU Heading -->
+        <h2 class="showcase-bottom-title">
+          <span>I</span>
+          <span>LOVE</span>
+          <span>YOU</span>
+        </h2>
+
+        <!-- Bottom Corner Illustrations -->
+        <div class="showcase-bottom-corners">
+          <div class="corner-sticker corner-bottom-left" title="Reading & playing">
+            <img src="f824771e0d116ddb24e2e8c12a8640d0.jpg" alt="Milk and Mocha with book and toy" class="sticker-img" />
+          </div>
+
+          <div class="corner-sticker corner-bottom-right" title="Forever cuddle">
+            <img src="598504a2606451471f22fc2a24b8a21b.jpg" alt="Milk and Mocha hug" class="sticker-img" />
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="surprise-screen" id="surpriseScreen" aria-live="polite">
       <div class="floating-hearts">
         <span>💖</span><span>💞</span><span>💗</span><span>💘</span><span>💖</span>
         <span>💞</span><span>💗</span><span>💘</span>
       </div>
 
-      <div class="message-card">
-        <p class="mini-tag">11 October • My Forever</p>
-        <h2>Happy Anniversary, Love 💕</h2>
-        <p>
-          Every second with you feels like a beautiful dream — soft, warm, and full of magic.
-          Thank you for being my peace, my happiness, and my favorite person in this whole world.
-        </p>
-        <p>
-          I love you more than words can say, and I am so grateful for every smile, every memory,
-          and every moment we have shared.
-        </p>
-        <p class="signature">Forever yours, Yash ❤️</p>
+      <!-- Interactive Envelope Experience -->
+      <div class="envelope-experience" id="envelopeExperience">
+        <!-- 1. Sealed Envelope State (Completely closed, zero leakage) -->
+        <div class="sealed-envelope-stage" id="sealedEnvelopeStage">
+          <p class="envelope-hint" id="envelopeHint">💌 A special love letter for you • Tap the wax seal to open!</p>
+          <div class="sealed-envelope-box">
+            <div class="env-back"></div>
+            <div class="env-pocket"></div>
+            <div class="env-flap" id="envFlap"></div>
+            <button type="button" class="wax-seal" id="waxSealBtn" aria-label="Open Love Letter">
+              <span class="wax-heart">💖</span>
+              <span class="wax-text">OPEN</span>
+              <span class="wax-ripple"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. Opened Letter & Memories View -->
+        <div class="opened-letter-view" id="openedLetterView" aria-hidden="true">
+          <div class="message-card">
+            <div class="letter-stamp">💌</div>
+            <p class="mini-tag">11 October • My Forever</p>
+            <h2>Happy Anniversary, Love 💕</h2>
+
+            <!-- Relationship Counter: Days, Hours, Mins, Secs -->
+            <div class="relationship-counter" id="relationshipCounter">
+              <p class="counter-label">✨ Loving You For ✨</p>
+              <div class="counter-grid">
+                <div class="counter-item">
+                  <span class="cnt-digit" id="cntDays">365</span>
+                  <span class="cnt-unit">Days</span>
+                </div>
+                <div class="counter-item">
+                  <span class="cnt-digit" id="cntHours">00</span>
+                  <span class="cnt-unit">Hours</span>
+                </div>
+                <div class="counter-item">
+                  <span class="cnt-digit" id="cntMinutes">00</span>
+                  <span class="cnt-unit">Mins</span>
+                </div>
+                <div class="counter-item">
+                  <span class="cnt-digit" id="cntSeconds">00</span>
+                  <span class="cnt-unit">Secs</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="letter-text">
+              <p>
+                Every second with you feels like a beautiful dream — soft, warm, and full of magic.
+                Thank you for being my peace, my happiness, and my favorite person in this whole world.
+              </p>
+              <p>
+                I love you more than words can say, and I am so grateful for every smile, every memory,
+                and every moment we have shared together.
+              </p>
+              <p class="signature">Forever yours, Yash ❤️</p>
+            </div>
+
+            <!-- Polaroid Memories Gallery -->
+            <div class="memories-section">
+              <h3 class="memories-title">🌸 Our Little Moments 🌸</h3>
+              <p class="memories-sub">Tap any polaroid photo to view our memory</p>
+              
+              <div class="polaroid-grid">
+                <div class="polaroid-card" data-title="The Day We Met" data-text="Where our forever story started 💕">
+                  <div class="washi-tape"></div>
+                  <div class="polaroid-frame">
+                    <img src="f824771e0d116ddb24e2e8c12a8640d0.jpg" alt="The Day We Met" class="polaroid-pic" />
+                  </div>
+                  <p class="polaroid-caption">The Day We Met 🌸</p>
+                </div>
+
+                <div class="polaroid-card" data-title="Every Smile With You" data-text="Your smile is my favorite thing in the universe ✨">
+                  <div class="washi-tape"></div>
+                  <div class="polaroid-frame">
+                    <img src="e5d5e612e709ece677c814935848bfbe.gif" alt="Our sweet smiles" class="polaroid-pic" />
+                  </div>
+                  <p class="polaroid-caption">Happy Smiles ✨</p>
+                </div>
+
+                <div class="polaroid-card" data-title="Warmest Cuddles" data-text="Your hugs heal everything in my day 🧸💕">
+                  <div class="washi-tape"></div>
+                  <div class="polaroid-frame">
+                    <img src="598504a2606451471f22fc2a24b8a21b.jpg" alt="Loving Hugs" class="polaroid-pic" />
+                  </div>
+                  <p class="polaroid-caption">Loving Hugs 💕</p>
+                </div>
+
+                <div class="polaroid-card" data-title="Forever & Always" data-text="Today, tomorrow, and every lifetime with you ♾️❤️">
+                  <div class="washi-tape"></div>
+                  <div class="polaroid-frame">
+                    <img src="a08232c97cbe65e4618e2f54b7cd7e9e.gif" alt="Forever and Always" class="polaroid-pic" />
+                  </div>
+                  <p class="polaroid-caption">Forever & Always ♾️</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="letter-footer">
+              <button type="button" class="back-to-showcase-btn" id="backToShowcaseBtn">
+                <span>🌸</span> View Our Moments <span>💕</span>
+              </button>
+              <button type="button" class="reseal-envelope-btn" id="resealEnvelopeBtn" title="Fold back into envelope">
+                <span>💌</span> Fold Letter
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Polaroid Zoom Modal -->
+    <div class="polaroid-modal" id="polaroidModal" aria-hidden="true" role="dialog">
+      <div class="polaroid-modal-card">
+        <button type="button" class="modal-close-btn" id="polaroidModalClose" aria-label="Close">✕</button>
+        <div class="modal-img-wrap">
+          <img src="" alt="Memory photo" id="modalImg" />
+        </div>
+        <h4 id="modalTitle">Memory Title</h4>
+        <p id="modalDesc">Memory Description</p>
       </div>
     </div>
 

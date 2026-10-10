@@ -10,6 +10,8 @@ const tryAgainBtn = document.getElementById('tryAgainBtn');
 const yesBtn = document.getElementById('yesBtn');
 const noBtn = document.getElementById('noBtn');
 const noPlea = document.getElementById('noPlea');
+const clickMeBtn = document.getElementById('clickMeBtn');
+const backToShowcaseBtn = document.getElementById('backToShowcaseBtn');
 
 let noCount = 0;
 let modalSource = 'passcode'; // 'passcode' | 'question_no'
@@ -91,13 +93,21 @@ function hideWrongModal() {
 }
 
 function openQuestionScreen() {
-  document.body.classList.remove('step-surprise');
+  document.body.classList.remove('step-showcase', 'step-surprise');
   document.body.classList.add('step-question');
+  tryAutoPlayMusic();
+}
+
+function openShowcaseScreen() {
+  document.body.classList.remove('step-question', 'step-surprise');
+  document.body.classList.add('step-showcase');
+  tryAutoPlayMusic();
 }
 
 function openSurpriseScreen() {
-  document.body.classList.remove('step-question');
+  document.body.classList.remove('step-question', 'step-showcase');
   document.body.classList.add('step-surprise');
+  tryAutoPlayMusic();
 }
 
 function handleNo() {
@@ -142,11 +152,19 @@ function handleNo() {
 }
 
 if (yesBtn) {
-  yesBtn.addEventListener('click', openSurpriseScreen);
+  yesBtn.addEventListener('click', openShowcaseScreen);
 }
 
 if (noBtn) {
   noBtn.addEventListener('click', handleNo);
+}
+
+if (clickMeBtn) {
+  clickMeBtn.addEventListener('click', openSurpriseScreen);
+}
+
+if (backToShowcaseBtn) {
+  backToShowcaseBtn.addEventListener('click', openShowcaseScreen);
 }
 
 function handleInput(value) {
@@ -236,11 +254,23 @@ slots.forEach((slot, index) => {
 });
 
 window.addEventListener('keydown', (e) => {
-  if (document.body.classList.contains('step-surprise')) return;
+  if (document.body.classList.contains('step-surprise')) {
+    if (e.key === 'Escape') {
+      openShowcaseScreen();
+    }
+    return;
+  }
+
+  if (document.body.classList.contains('step-showcase')) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      openSurpriseScreen();
+    }
+    return;
+  }
 
   if (document.body.classList.contains('step-question')) {
     if (e.key === 'y' || e.key === 'Y' || e.key === 'Enter') {
-      openSurpriseScreen();
+      openShowcaseScreen();
     } else if (e.key === 'n' || e.key === 'N') {
       handleNo();
     }
@@ -266,3 +296,233 @@ window.addEventListener('keydown', (e) => {
 });
 
 renderSlots();
+
+// --- 1. Romantic Music Box Player (Web Audio API) ---
+class RomanticMusicBox {
+  constructor() {
+    this.ctx = null;
+    this.isPlaying = false;
+    this.timer = null;
+    this.step = 0;
+    // Sweet, soothing lofi romantic music box melody
+    this.melody = [
+      261.63, 329.63, 392.00, 523.25,
+      293.66, 369.99, 440.00, 587.33,
+      220.00, 261.63, 329.63, 440.00,
+      174.61, 220.00, 261.63, 349.23,
+      196.00, 246.94, 293.66, 392.00,
+      261.63, 329.63, 392.00, 523.25
+    ];
+  }
+
+  init() {
+    if (!this.ctx) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        this.ctx = new AudioCtx();
+      }
+    }
+  }
+
+  playNote(freq) {
+    if (!this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
+
+      // Bell music-box envelope
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.06, now + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 1.25);
+    } catch(err) {}
+  }
+
+  start() {
+    this.init();
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+    if (this.isPlaying) return;
+    this.isPlaying = true;
+    this.step = 0;
+
+    const tick = () => {
+      if (!this.isPlaying) return;
+      const freq = this.melody[this.step % this.melody.length];
+      this.playNote(freq);
+      this.step++;
+      this.timer = setTimeout(tick, 340);
+    };
+    tick();
+  }
+
+  stop() {
+    this.isPlaying = false;
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
+  }
+
+  toggle() {
+    if (this.isPlaying) {
+      this.stop();
+      return false;
+    } else {
+      this.start();
+      return true;
+    }
+  }
+}
+
+const musicBox = new RomanticMusicBox();
+const musicToggleBtn = document.getElementById('musicToggleBtn');
+const musicLabel = document.getElementById('musicLabel');
+
+function updateMusicUI(isPlaying) {
+  if (!musicToggleBtn) return;
+  musicToggleBtn.classList.toggle('playing', isPlaying);
+  if (musicLabel) {
+    musicLabel.textContent = isPlaying ? 'Music: Playing' : 'Music: Paused';
+  }
+}
+
+if (musicToggleBtn) {
+  musicToggleBtn.addEventListener('click', () => {
+    const isPlaying = musicBox.toggle();
+    updateMusicUI(isPlaying);
+  });
+}
+
+function tryAutoPlayMusic() {
+  if (!musicBox.isPlaying) {
+    musicBox.start();
+    updateMusicUI(true);
+  }
+}
+
+// --- 2. Interactive Wax Seal Envelope Opening ---
+// --- 2. Interactive Wax Seal Envelope Opening ---
+const sealedEnvelopeStage = document.getElementById('sealedEnvelopeStage');
+const openedLetterView = document.getElementById('openedLetterView');
+const envFlap = document.getElementById('envFlap');
+const waxSealBtn = document.getElementById('waxSealBtn');
+const resealEnvelopeBtn = document.getElementById('resealEnvelopeBtn');
+
+function openEnvelope() {
+  if (waxSealBtn) waxSealBtn.classList.add('broken');
+  if (envFlap) envFlap.classList.add('open');
+
+  setTimeout(() => {
+    if (sealedEnvelopeStage) {
+      sealedEnvelopeStage.classList.add('opening');
+      setTimeout(() => {
+        sealedEnvelopeStage.classList.add('hidden');
+        if (openedLetterView) {
+          openedLetterView.classList.add('visible');
+          openedLetterView.setAttribute('aria-hidden', 'false');
+        }
+      }, 350);
+    }
+  }, 450);
+  tryAutoPlayMusic();
+}
+
+function resealEnvelope() {
+  if (openedLetterView) {
+    openedLetterView.classList.remove('visible');
+    openedLetterView.setAttribute('aria-hidden', 'true');
+  }
+  if (sealedEnvelopeStage) {
+    sealedEnvelopeStage.classList.remove('hidden', 'opening');
+  }
+  if (envFlap) envFlap.classList.remove('open');
+  if (waxSealBtn) waxSealBtn.classList.remove('broken');
+}
+
+if (waxSealBtn) {
+  waxSealBtn.addEventListener('click', openEnvelope);
+}
+
+if (resealEnvelopeBtn) {
+  resealEnvelopeBtn.addEventListener('click', resealEnvelope);
+}
+
+// --- 3. Relationship Counter (Days, Hours, Mins, Secs) ---
+// Anniversary base date: 11 October
+const anniversaryStartDate = new Date('2024-10-11T00:00:00');
+const cntDays = document.getElementById('cntDays');
+const cntHours = document.getElementById('cntHours');
+const cntMinutes = document.getElementById('cntMinutes');
+const cntSeconds = document.getElementById('cntSeconds');
+
+function updateRelationshipCounter() {
+  const now = new Date();
+  const diffMs = Math.max(0, now - anniversaryStartDate);
+  const totalSeconds = Math.floor(diffMs / 1000);
+
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  if (cntDays) cntDays.textContent = String(days);
+  if (cntHours) cntHours.textContent = String(hours).padStart(2, '0');
+  if (cntMinutes) cntMinutes.textContent = String(minutes).padStart(2, '0');
+  if (cntSeconds) cntSeconds.textContent = String(seconds).padStart(2, '0');
+}
+
+setInterval(updateRelationshipCounter, 1000);
+updateRelationshipCounter();
+
+// --- 4. Polaroid Memory Cards Modal ---
+const polaroidCards = document.querySelectorAll('.polaroid-card');
+const polaroidModal = document.getElementById('polaroidModal');
+const polaroidModalClose = document.getElementById('polaroidModalClose');
+const modalImg = document.getElementById('modalImg');
+const modalTitle = document.getElementById('modalTitle');
+const modalDesc = document.getElementById('modalDesc');
+
+polaroidCards.forEach(card => {
+  card.addEventListener('click', () => {
+    const img = card.querySelector('img');
+    const title = card.getAttribute('data-title') || 'Sweet Moment';
+    const text = card.getAttribute('data-text') || '';
+    if (modalImg && img) modalImg.src = img.src;
+    if (modalTitle) modalTitle.textContent = title;
+    if (modalDesc) modalDesc.textContent = text;
+    if (polaroidModal) {
+      polaroidModal.classList.add('visible');
+      polaroidModal.setAttribute('aria-hidden', 'false');
+    }
+  });
+});
+
+function closePolaroidModal() {
+  if (polaroidModal) {
+    polaroidModal.classList.remove('visible');
+    polaroidModal.setAttribute('aria-hidden', 'true');
+  }
+}
+
+if (polaroidModalClose) {
+  polaroidModalClose.addEventListener('click', closePolaroidModal);
+}
+
+if (polaroidModal) {
+  polaroidModal.addEventListener('click', (e) => {
+    if (e.target === polaroidModal) {
+      closePolaroidModal();
+    }
+  });
+}
