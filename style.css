@@ -1529,6 +1529,74 @@ body.step-video .surprise-screen {
   line-height: 1.2;
 }
 
+/* Reveal Polaroid Card Styles */
+.polaroid-card.reveal-card .polaroid-frame {
+  position: relative;
+}
+
+.reveal-hint-pill {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  color: #c9184a;
+  font-family: 'Fredoka', 'Quicksand', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 12px rgba(201, 24, 74, 0.28);
+  pointer-events: none;
+  white-space: nowrap;
+  animation: revealPulse 2s ease-in-out infinite;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 2;
+}
+
+@keyframes revealPulse {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0) scale(1);
+    box-shadow: 0 4px 12px rgba(201, 24, 74, 0.28);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 16px rgba(201, 24, 74, 0.42);
+  }
+}
+
+.polaroid-card.reveal-card.is-revealed .polaroid-pic {
+  animation: photoRevealPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes photoRevealPop {
+  0% { transform: scale(0.92); opacity: 0.5; }
+  60% { transform: scale(1.04); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.burst-heart {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  font-size: 1.25rem;
+  animation: burstHeartAnim 0.85s ease-out forwards;
+}
+
+@keyframes burstHeartAnim {
+  0% {
+    transform: translate(-50%, -50%) scale(0.4);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--dx, 0px)), calc(-50% + var(--dy, -40px))) scale(1.35);
+    opacity: 0;
+  }
+}
+
 .letter-footer {
   margin-top: 24px;
   display: flex;
@@ -1536,6 +1604,34 @@ body.step-video .surprise-screen {
   align-items: center;
   justify-content: center;
   gap: 12px;
+}
+
+.view-moments-video-btn {
+  appearance: none;
+  background: linear-gradient(135deg, #e63956, #ba1e38);
+  border: none;
+  color: #ffffff !important;
+  font-family: 'Fredoka', 'Quicksand', sans-serif;
+  font-size: 1.02rem;
+  font-weight: 700;
+  padding: 12px 28px;
+  border-radius: 9999px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(186, 30, 56, 0.35);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.view-moments-video-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 10px 28px rgba(186, 30, 56, 0.45);
+}
+
+.view-moments-video-btn:active {
+  transform: scale(0.96);
 }
 
 /* Polaroid Zoom Modal */
@@ -1566,7 +1662,7 @@ body.step-video .surprise-screen {
   background: #ffffff;
   padding: 18px 18px 22px;
   border-radius: 20px;
-  max-width: 400px;
+  max-width: min(92vw, 440px);
   width: 100%;
   text-align: center;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
@@ -1604,17 +1700,18 @@ body.step-video .surprise-screen {
 
 .modal-img-wrap {
   width: 100%;
-  max-height: 290px;
-  border-radius: 12px;
+  max-height: min(440px, 65vh);
+  border-radius: 14px;
   overflow: hidden;
   margin: 10px 0 14px;
-  background: #fff5f8;
+  background: #fff0f5;
+  box-shadow: inset 0 0 0 1px rgba(255, 182, 193, 0.4);
 }
 
 .modal-img-wrap img {
   width: 100%;
   height: auto;
-  max-height: 290px;
+  max-height: min(440px, 65vh);
   object-fit: contain;
   display: block;
 }

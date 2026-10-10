@@ -567,7 +567,7 @@ function updateRelationshipCounter() {
 setInterval(updateRelationshipCounter, 1000);
 updateRelationshipCounter();
 
-// --- 4. Polaroid Memory Cards Modal ---
+// --- 4. Polaroid Memory Cards Modal & Surprise Reveal ---
 const polaroidCards = document.querySelectorAll('.polaroid-card');
 const polaroidModal = document.getElementById('polaroidModal');
 const polaroidModalClose = document.getElementById('polaroidModalClose');
@@ -575,12 +575,69 @@ const modalImg = document.getElementById('modalImg');
 const modalTitle = document.getElementById('modalTitle');
 const modalDesc = document.getElementById('modalDesc');
 
+function triggerHeartBurst(x, y) {
+  const emojis = ['💖', '💕', '✨', '🌸', '🧸', '💝'];
+  for (let i = 0; i < 9; i++) {
+    const heart = document.createElement('span');
+    heart.className = 'burst-heart';
+    heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    const angle = (i / 9) * Math.PI * 2 + (Math.random() * 0.4 - 0.2);
+    const dist = 45 + Math.random() * 45;
+    const dx = Math.cos(angle) * dist;
+    const dy = Math.sin(angle) * dist - 20;
+
+    heart.style.left = `${x}px`;
+    heart.style.top = `${y}px`;
+    heart.style.setProperty('--dx', `${dx}px`);
+    heart.style.setProperty('--dy', `${dy}px`);
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 900);
+  }
+}
+
 polaroidCards.forEach(card => {
-  card.addEventListener('click', () => {
-    const img = card.querySelector('img');
+  card.addEventListener('click', (e) => {
+    const img = card.querySelector('.polaroid-pic') || card.querySelector('img');
     const title = card.getAttribute('data-title') || 'Sweet Moment';
     const text = card.getAttribute('data-text') || '';
-    if (modalImg && img) modalImg.src = img.src;
+    const modalImageSrc = card.getAttribute('data-modal-img') || (img ? img.src : '');
+    const revealImg = card.getAttribute('data-reveal-img');
+
+    // Trigger reveal if card has secret reveal image (starts with bear image, reveals photo on click)
+    if (revealImg && img) {
+      const rect = card.getBoundingClientRect();
+      const burstX = e.clientX || (rect.left + rect.width / 2);
+      const burstY = e.clientY || (rect.top + rect.height / 2);
+      triggerHeartBurst(burstX, burstY);
+
+      if (!card.classList.contains('is-revealed')) {
+        card.classList.add('is-revealed');
+        // Smoothly reveal image on the card
+        img.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+        img.style.opacity = '0';
+        img.style.transform = 'scale(0.94)';
+
+        setTimeout(() => {
+          img.src = revealImg;
+          img.style.opacity = '1';
+          img.style.transform = 'scale(1)';
+        }, 180);
+
+        const pill = card.querySelector('.reveal-hint-pill');
+        if (pill) {
+          pill.textContent = '💖 Revealed! ✨';
+          setTimeout(() => {
+            pill.style.opacity = '0';
+          }, 1500);
+        }
+      }
+    }
+
+    if (modalImg) {
+      if (modalImageSrc) {
+        modalImg.src = modalImageSrc;
+      }
+    }
     if (modalTitle) modalTitle.textContent = title;
     if (modalDesc) modalDesc.textContent = text;
     if (polaroidModal) {
@@ -608,3 +665,9 @@ if (polaroidModal) {
     }
   });
 }
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closePolaroidModal();
+  }
+});
